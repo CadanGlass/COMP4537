@@ -6,6 +6,7 @@ class GameController {
       // Get the number of buttons from the input field
       this.n = parseInt(document.getElementById("buttonInput").value); // Store n in the class instance
       if (this.validateInput(this.n)) {
+        this.resetGame()
         this.startGame(this.n);
       } else {
         alert("Please enter a valid number between 3 and 7");
@@ -13,7 +14,6 @@ class GameController {
     });
 
     this.clicksCount = 0;
-    this.lastButton = null; // Initialize lastButton as null or another default value
   }
   validateInput(n) {
     return n >= 3 && n <= 7;
@@ -87,6 +87,8 @@ class GameController {
     // Reset game state variables
     this.clicksCount = 0; // Reset the click counter
     this.buttons = []; // Clear the buttons array
+
+    
   }
 
   getRandomColor() {
@@ -124,13 +126,31 @@ class Button {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
 
+    // Get the boundaries of the container that holds the input fields
+    const container = document.querySelector(".container");
+    if (!container) {
+      console.error("Container not found!");
+      return;
+    }
+
+    const containerRect = container.getBoundingClientRect();
+
     // Calculate the maximum allowed position (75% of window dimensions)
     const maxX = windowWidth * 0.75 - 100; // Subtract 100 to ensure the button doesn't leave the screen
     const maxY = windowHeight * 0.75 - 100;
 
-    // Generate random positions within the restricted area
-    const randomX = Math.random() * maxX;
-    const randomY = Math.random() * maxY;
+    let randomX, randomY;
+
+    // Keep generating random positions until it's outside the container area
+    do {
+      randomX = Math.random() * maxX;
+      randomY = Math.random() * maxY;
+    } while (
+      randomX > containerRect.left &&
+      randomX < containerRect.right &&
+      randomY > containerRect.top &&
+      randomY < containerRect.bottom
+    );
 
     // Set the button's position
     this.element.style.position = "absolute";
