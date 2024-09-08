@@ -65,13 +65,24 @@ input[type="button"]:hover {
   height: 50px;
   width: 100px;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 20px; /* Increase font size */
+  font-weight: bold; /* Make the text bold */
+  color: white; /* Set text color to white for contrast */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add subtle shadow to make it pop */
   cursor: pointer;
+  border: none; /* Remove border */
 }
+
+
+
 
 /* Message container for game messages */
 #messageContainer {
   margin-top: 20px;
   font-size: 18px;
   color: #555;
+}
+
+p {
+    font-weight: 300;
 }

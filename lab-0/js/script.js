@@ -58,6 +58,8 @@ class GameController {
 
   endGame(isSuccess) {
     // Display success or failure message
+
+    
     const successMessage = isSuccess ? "Excellent memory!" : "Wrong order!";
     const messageHandler = new MessageHandler();
 
@@ -68,6 +70,8 @@ class GameController {
     const messageContainer = document.getElementById("messageContainer");
     const countdownElement = document.createElement("p");
     messageContainer.appendChild(countdownElement);
+
+    
 
     const resetMessage = "Resetting game in ";
     let timeLeft = 3;
@@ -84,6 +88,8 @@ class GameController {
         this.resetGame();
       }
     }, 1000); // Update every second (1000 ms)
+
+    this.disableButtons("true");
   }
 
   resetGame() {
