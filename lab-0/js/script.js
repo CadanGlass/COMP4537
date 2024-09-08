@@ -6,7 +6,7 @@ class GameController {
       // Get the number of buttons from the input field
       this.n = parseInt(document.getElementById("buttonInput").value); // Store n in the class instance
       if (this.validateInput(this.n)) {
-        this.resetGame()
+        this.resetGame();
         this.startGame(this.n);
       } else {
         alert("Please enter a valid number between 3 and 7");
@@ -15,6 +15,7 @@ class GameController {
 
     this.clicksCount = 0;
   }
+
   validateInput(n) {
     return n >= 3 && n <= 7;
   }
@@ -30,8 +31,15 @@ class GameController {
       this.buttons.push(button);
     }
 
+    // Disable buttons before scrambling them
+    this.disableButtons(true);
+
     // Scramble buttons after n seconds
-    setTimeout(() => this.scrambleButtons(), n * 1000);
+    setTimeout(() => {
+      this.scrambleButtons();
+      // Re-enable buttons after scrambling
+      this.disableButtons(false);
+    }, n * 1000);
   }
 
   scrambleButtons() {
@@ -41,7 +49,12 @@ class GameController {
     });
   }
 
-  checkUserClickOrder(clickOrder) {}
+  disableButtons(disable) {
+    // Disable or enable all buttons in the button container
+    this.buttons.forEach((button) => {
+      button.element.disabled = disable; // Disable or enable button clicks
+    });
+  }
 
   endGame(isSuccess) {
     // Display success or failure message
@@ -57,7 +70,7 @@ class GameController {
     messageContainer.appendChild(countdownElement);
 
     const resetMessage = "Resetting game in ";
-    let timeLeft = 5;
+    let timeLeft = 3;
 
     // Start the countdown
     const countdown = setInterval(() => {
@@ -87,8 +100,6 @@ class GameController {
     // Reset game state variables
     this.clicksCount = 0; // Reset the click counter
     this.buttons = []; // Clear the buttons array
-
-    
   }
 
   getRandomColor() {
