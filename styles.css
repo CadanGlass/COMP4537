@@ -5,11 +5,22 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%; /* Ensure the body takes the full height of the viewport */
+}
+
 body {
+    display: flex;
+    flex-direction: column;
     font-family: 'Roboto', sans-serif;
     background-color: #f7f8fa;
     color: #333;
     line-height: 1.6;
+}
+
+/* Main content area should expand to fill the space between the header and footer */
+.container {
+    flex: 1; /* This allows the container to grow and take the available space */
 }
 
 /* Header section */
@@ -76,7 +87,7 @@ body {
     color: white;
     text-align: center;
     padding: 20px 0;
-    margin-top: 40px;
+    margin-top: auto; /* This pushes the footer to the bottom */
 }
 
 .footer p {
