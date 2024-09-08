@@ -4,18 +4,17 @@ class GameController {
     const goButton = document.getElementById("goButton");
     goButton.addEventListener("click", () => {
       // Get the number of buttons from the input field
-      const n = parseInt(document.getElementById("buttonInput").value);
-      if (this.validateInput(n)) {
-        this.startGame(n);
+      this.n = parseInt(document.getElementById("buttonInput").value); // Store n in the class instance
+      if (this.validateInput(this.n)) {
+        this.startGame(this.n);
       } else {
         alert("Please enter a valid number between 3 and 7");
       }
     });
 
     this.clicksCount = 0;
+    this.lastButton = null; // Initialize lastButton as null or another default value
   }
-
-
   validateInput(n) {
     return n >= 3 && n <= 7;
   }
@@ -27,7 +26,7 @@ class GameController {
     this.buttons = [];
     for (let i = 0; i < n; i++) {
       const button = new Button(i, this.getRandomColor(), { x: 0, y: 0 }, this);
-      button.render();
+      button.renderButton();
       this.buttons.push(button);
     }
 
@@ -42,15 +41,52 @@ class GameController {
     });
   }
 
-  checkUserClickOrder(clickOrder) {
-    
-  }
+  checkUserClickOrder(clickOrder) {}
 
   endGame(isSuccess) {
     // Display success or failure message
-    const message = isSuccess ? "Excellent memory!" : "Wrong order!";
+    const successMessage = isSuccess ? "Excellent memory!" : "Wrong order!";
     const messageHandler = new MessageHandler();
-    messageHandler.showMessage(message);
+
+    // Render the success message
+    messageHandler.renderMessage(successMessage);
+
+    // Create an element to display the countdown
+    const messageContainer = document.getElementById("messageContainer");
+    const countdownElement = document.createElement("p");
+    messageContainer.appendChild(countdownElement);
+
+    const resetMessage = "Resetting game in ";
+    let timeLeft = 5; 
+
+    // Start the countdown
+    const countdown = setInterval(() => {
+      if (timeLeft > 0) {
+        countdownElement.innerText = `${resetMessage} ${timeLeft} seconds`;
+        timeLeft--;
+      } else {
+        countdownElement.innerText = "Resetting now...";
+        clearInterval(countdown); // Stop the countdown
+
+        this.resetGame();
+      }
+    }, 1000); // Update every second (1000 ms)
+  }
+
+  resetGame() {
+    console.log("Resetting the game...");
+
+    // Clear the buttons container
+    const buttonContainer = document.getElementById("buttonContainer");
+    buttonContainer.innerHTML = ""; // Remove all buttons
+
+    // Clear the message container
+    const messageContainer = document.getElementById("messageContainer");
+    messageContainer.innerHTML = ""; // Remove all messages
+
+    // Reset game state variables
+    this.clicksCount = 0; // Reset the click counter
+    this.buttons = []; // Clear the buttons array
   }
 
   getRandomColor() {
@@ -71,7 +107,7 @@ class Button {
     this.gameController = gameController;
   }
 
-  render() {
+  renderButton() {
     const buttonContainer = document.getElementById("buttonContainer");
     const btn = document.createElement("button");
     btn.style.backgroundColor = this.color;
@@ -87,38 +123,55 @@ class Button {
   moveRandomly() {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
-    const randomX = Math.random() * (windowWidth - 100); // Make sure it doesn't leave the window
-    const randomY = Math.random() * (windowHeight - 100);
+
+    // Calculate the maximum allowed position (75% of window dimensions)
+    const maxX = windowWidth * 0.75 - 100; // Subtract 100 to ensure the button doesn't leave the screen
+    const maxY = windowHeight * 0.75 - 100;
+
+    // Generate random positions within the restricted area
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
+
+    // Set the button's position
     this.element.style.position = "absolute";
     this.element.style.left = `${randomX}px`;
     this.element.style.top = `${randomY}px`;
-    this.element.textContent = ""
+    this.element.textContent = "";
   }
 
   onClick() {
     console.log(`Button ${this.id + 1} clicked`);
     if (this.id === this.gameController.clicksCount) {
-        console.log("correct")
-        this.gameController.clicksCount += 1
-        this.revealButton()
+      console.log("correct");
+      this.gameController.clicksCount += 1;
+      this.revealButton();
 
+      console.log(this.gameController.n, "n");
+
+      if (this.id + 1 == this.gameController.n) {
+        this.gameController.endGame(true);
+      }
     } else {
-        console.log("incorrect")
-        this.gameController.endGame(false)
+      console.log("incorrect");
+      this.gameController.endGame(false);
     }
-
 
     // Logic for handling button click
   }
 
   revealButton() {
-    this.element.textContent = this.id+1
+    this.element.textContent = this.id + 1;
   }
 }
 
 class MessageHandler {
-  showMessage(message) {
-    alert(message);
+  renderMessage(message) {
+    const messageContainer = document.getElementById("messageContainer");
+    const paragraph = document.createElement("p");
+    paragraph.innerText = message; // Use the message passed into the method
+    messageContainer.appendChild(paragraph);
+
+    console.log(message, "message");
   }
 }
 
