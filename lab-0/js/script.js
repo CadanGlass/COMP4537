@@ -123,37 +123,47 @@ class Button {
   }
 
   moveRandomly() {
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-
-    // Get the boundaries of the container that holds the input fields
     const container = document.querySelector(".container");
+
     if (!container) {
       console.error("Container not found!");
       return;
     }
 
     const containerRect = container.getBoundingClientRect();
+    const buttonWidth = this.element.offsetWidth;
+    const buttonHeight = this.element.offsetHeight;
 
-    // Calculate the maximum allowed position (75% of window dimensions)
-    const maxX = windowWidth * 0.75 - 100; // Subtract 100 to ensure the button doesn't leave the screen
-    const maxY = windowHeight * 0.75 - 100;
+    // Use viewport dimensions instead of window dimensions
+    const viewportWidth = document.documentElement.clientWidth;
+    const viewportHeight = document.documentElement.clientHeight;
 
     let randomX, randomY;
+    let attempts = 0;
+    const maxAttempts = 100; // Prevent infinite loop
 
-    // Keep generating random positions until it's outside the container area
     do {
-      randomX = Math.random() * maxX;
-      randomY = Math.random() * maxY;
+      // Generate random positions within the viewport, leaving some margin
+      randomX = Math.random() * (viewportWidth - buttonWidth - 20) + 10;
+      randomY = Math.random() * (viewportHeight - buttonHeight - 20) + 10;
+
+      attempts++;
+      if (attempts > maxAttempts) {
+        console.warn(
+          "Max attempts reached. Button may overlap with container."
+        );
+        break;
+      }
     } while (
-      randomX > containerRect.left &&
+      // Check if the button overlaps with the container
       randomX < containerRect.right &&
-      randomY > containerRect.top &&
-      randomY < containerRect.bottom
+      randomX + buttonWidth > containerRect.left &&
+      randomY < containerRect.bottom &&
+      randomY + buttonHeight > containerRect.top
     );
 
     // Set the button's position
-    this.element.style.position = "absolute";
+    this.element.style.position = "fixed"; // Change to fixed positioning
     this.element.style.left = `${randomX}px`;
     this.element.style.top = `${randomY}px`;
     this.element.textContent = "";
