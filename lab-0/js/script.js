@@ -1,114 +1,113 @@
+// This code was developed with assistance from ChatGPT for explanations and guidance on structure.
+// Used for Lab/Assignment purposes, as per guidelines.
+
 class GameController {
   constructor() {
-    // Select the Go button and add an event listener
+    this.clicksCount = 0; // Initialize the count of correct clicks
+    this.initializeGoButton(); // Set up the Go button click listener
+  }
+
+  initializeGoButton() {
+    // Select the Go button and add an event listener for starting the game
     const goButton = document.getElementById("goButton");
     goButton.addEventListener("click", () => {
       // Get the number of buttons from the input field
-      this.n = parseInt(document.getElementById("buttonInput").value); // Store n in the class instance
+      this.n = parseInt(document.getElementById("buttonInput").value);
       if (this.validateInput(this.n)) {
-        this.resetGame();
-        this.startGame(this.n);
+        // Validate the input
+        this.resetGame(); // Reset the game state if valid
+        this.startGame(this.n); // Start the game with n buttons
       } else {
         alert("Please enter a valid number between 3 and 7");
       }
     });
-
-    this.clicksCount = 0;
   }
 
   validateInput(n) {
+    // Ensure the number is between 3 and 7
     return n >= 3 && n <= 7;
   }
 
   startGame(n) {
     console.log(`Starting game with ${n} buttons`);
 
-    // Create buttons and set up the game
+    // Create n buttons and store them in the buttons array
     this.buttons = [];
     for (let i = 0; i < n; i++) {
       const button = new Button(i, this.getRandomColor(), { x: 0, y: 0 }, this);
-      button.renderButton();
-      this.buttons.push(button);
+      button.renderButton(); // Render the button to the DOM
+      this.buttons.push(button); // Add the button to the array
     }
 
-    // Disable buttons before scrambling them
-    this.disableButtons(true);
+    this.disableButtons(true); // Disable buttons before scrambling
 
-    // Scramble buttons after n seconds
+    // Scramble buttons after n seconds and re-enable them
     setTimeout(() => {
       this.scrambleButtons();
-      // Re-enable buttons after scrambling
-      this.disableButtons(false);
+      this.disableButtons(false); // Enable buttons for user interaction
     }, n * 1000);
   }
 
   scrambleButtons() {
     console.log("Scrambling buttons...");
+    // Move each button to a random position
     this.buttons.forEach((button) => {
       button.moveRandomly();
     });
   }
 
   disableButtons(disable) {
-    // Disable or enable all buttons in the button container
+    // Enable or disable all buttons based on the disable flag
     this.buttons.forEach((button) => {
-      button.element.disabled = disable; // Disable or enable button clicks
+      button.element.disabled = disable;
     });
   }
 
   endGame(isSuccess) {
-    // Display success or failure message
-
-    
+    // Display a success or failure message and reset the game after a countdown
     const successMessage = isSuccess ? "Excellent memory!" : "Wrong order!";
     const messageHandler = new MessageHandler();
+    messageHandler.renderMessage(successMessage); // Show the message
 
-    // Render the success message
-    messageHandler.renderMessage(successMessage);
-
-    // Create an element to display the countdown
     const messageContainer = document.getElementById("messageContainer");
     const countdownElement = document.createElement("p");
     messageContainer.appendChild(countdownElement);
 
-    
-
     const resetMessage = "Resetting game in ";
-    let timeLeft = 3;
+    let timeLeft = 3; // Countdown duration
 
-    // Start the countdown
+    // Start countdown and reset the game when finished
     const countdown = setInterval(() => {
       if (timeLeft > 0) {
         countdownElement.innerText = `${resetMessage} ${timeLeft} seconds`;
         timeLeft--;
       } else {
         countdownElement.innerText = "Resetting now...";
-        clearInterval(countdown); // Stop the countdown
-
-        this.resetGame();
+        clearInterval(countdown); // Stop countdown
+        this.resetGame(); // Reset the game
       }
-    }, 1000); // Update every second (1000 ms)
+    }, 1000); // Countdown interval in milliseconds
 
-    this.disableButtons("true");
+    this.disableButtons(true); // Disable buttons during the countdown
   }
 
   resetGame() {
     console.log("Resetting the game...");
 
-    // Clear the buttons container
+    // Clear buttons and messages from the DOM
     const buttonContainer = document.getElementById("buttonContainer");
     buttonContainer.innerHTML = ""; // Remove all buttons
 
-    // Clear the message container
     const messageContainer = document.getElementById("messageContainer");
     messageContainer.innerHTML = ""; // Remove all messages
 
     // Reset game state variables
-    this.clicksCount = 0; // Reset the click counter
-    this.buttons = []; // Clear the buttons array
+    this.clicksCount = 0;
+    this.buttons = [];
   }
 
   getRandomColor() {
+    // Generate a random hex color code
     const letters = "0123456789ABCDEF";
     let color = "#";
     for (let i = 0; i < 6; i++) {
@@ -123,23 +122,25 @@ class Button {
     this.id = id;
     this.color = color;
     this.position = position;
-    this.gameController = gameController;
+    this.gameController = gameController; // Reference to the game controller
   }
 
   renderButton() {
+    // Create a button element and add it to the DOM
     const buttonContainer = document.getElementById("buttonContainer");
     const btn = document.createElement("button");
     btn.style.backgroundColor = this.color;
     btn.style.height = "5em";
     btn.style.width = "10em";
-    btn.style.margin = "1em 1em"; // 1em space between buttons vertically and horizontally
-    btn.textContent = this.id + 1;
-    btn.addEventListener("click", () => this.onClick());
+    btn.style.margin = "1em 1em"; // Button margin
+    btn.textContent = this.id + 1; // Display button number
+    btn.addEventListener("click", () => this.onClick()); // Handle button click
     buttonContainer.appendChild(btn);
     this.element = btn;
   }
 
   moveRandomly() {
+    // Randomly position the button within the viewport, avoiding overlap with the container
     const container = document.querySelector(".container");
 
     if (!container) {
@@ -151,13 +152,13 @@ class Button {
     const buttonWidth = this.element.offsetWidth;
     const buttonHeight = this.element.offsetHeight;
 
-    // Use viewport dimensions instead of window dimensions
+    // Use viewport dimensions instead of window dimensions for better accuracy
     const viewportWidth = document.documentElement.clientWidth;
     const viewportHeight = document.documentElement.clientHeight;
 
     let randomX, randomY;
     let attempts = 0;
-    const maxAttempts = 100; // Prevent infinite loop
+    const maxAttempts = 100; // Limit attempts to prevent infinite loops
 
     do {
       // Generate random positions within the viewport, leaving some margin
@@ -172,53 +173,50 @@ class Button {
         break;
       }
     } while (
-      // Check if the button overlaps with the container
+      // Ensure the button doesn't overlap with the container
       randomX < containerRect.right &&
       randomX + buttonWidth > containerRect.left &&
       randomY < containerRect.bottom &&
       randomY + buttonHeight > containerRect.top
     );
 
-    // Set the button's position
-    this.element.style.position = "fixed"; // Change to fixed positioning
+    // Set the button's final position
+    this.element.style.position = "fixed"; // Set fixed positioning to avoid layout issues
     this.element.style.left = `${randomX}px`;
     this.element.style.top = `${randomY}px`;
-    this.element.textContent = "";
+    this.element.textContent = ""; // Clear button label
   }
 
   onClick() {
+    // Handle button click logic and validate the order
     console.log(`Button ${this.id + 1} clicked`);
     if (this.id === this.gameController.clicksCount) {
       console.log("correct");
       this.gameController.clicksCount += 1;
-      this.revealButton();
-
-      console.log(this.gameController.n, "n");
+      this.revealButton(); // Reveal the button number
 
       if (this.id + 1 == this.gameController.n) {
-        this.gameController.endGame(true);
+        this.gameController.endGame(true); // End game on success
       }
     } else {
       console.log("incorrect");
-      this.gameController.endGame(false);
+      this.gameController.endGame(false); // End game on failure
     }
-
-    // Logic for handling button click
   }
 
   revealButton() {
+    // Show the button number when clicked
     this.element.textContent = this.id + 1;
   }
 }
 
 class MessageHandler {
   renderMessage(message) {
+    // Render success or failure messages to the DOM
     const messageContainer = document.getElementById("messageContainer");
     const paragraph = document.createElement("p");
-    paragraph.innerText = message; // Use the message passed into the method
+    paragraph.innerText = message; // Set the message content
     messageContainer.appendChild(paragraph);
-
-    console.log(message, "message");
   }
 }
 
