@@ -1,0 +1,77 @@
+/* Basic body styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* Container for the whole page */
+.container {
+  margin: 50px auto;
+  max-width: 600px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Title */
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Input field styles */
+input[type="text"] {
+  width: 100px;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Button styles */
+input[type="button"] {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 10px;
+}
+
+input[type="button"]:hover {
+  background-color: #218838;
+}
+
+/* Button container for generated buttons */
+#buttonContainer {
+  margin: 20px 0;
+  padding: 20px;
+  border: 2px dashed #ccc;
+  min-height: 200px;
+  position: relative;
+}
+
+/* Buttons generated dynamically */
+#buttonContainer button {
+  height: 50px;
+  width: 100px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Message container for game messages */
+#messageContainer {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #555;
+}

@@ -57,7 +57,7 @@ class GameController {
     messageContainer.appendChild(countdownElement);
 
     const resetMessage = "Resetting game in ";
-    let timeLeft = 5; 
+    let timeLeft = 5;
 
     // Start the countdown
     const countdown = setInterval(() => {
