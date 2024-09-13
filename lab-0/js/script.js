@@ -130,8 +130,8 @@ class Button {
     const buttonContainer = document.getElementById("buttonContainer");
     const btn = document.createElement("button");
     btn.style.backgroundColor = this.color;
-    btn.style.height = "5em";
-    btn.style.width = "10em";
+    btn.style.height = "3em";
+    btn.style.width = "5em";
     btn.style.margin = "1em 1em"; // Button margin
     btn.textContent = this.id + 1; // Display button number
     btn.addEventListener("click", () => this.onClick()); // Handle button click
