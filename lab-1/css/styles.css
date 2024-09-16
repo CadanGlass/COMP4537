@@ -109,3 +109,43 @@ button:hover {
     padding: 5px 10px;
     background-color: #f8f9fa;
 }
+a.btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 10px 10px 20px 0;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007BFF;
+    border-radius: 5px;
+}
+
+a.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Specific styles for different buttons */
+a#addButton {
+    background-color: #28a745;
+}
+
+a#addButton:hover {
+    background-color: #218838;
+}
+
+a.back-button {
+    background-color: #6c757d;
+}
+
+a.back-button:hover {
+    background-color: #5a6268;
+}
+
+/* If you have a remove button as an anchor (unlikely), but adding for completeness */
+a.remove-button {
+    background-color: #dc3545;
+}
+
+a.remove-button:hover {
+    background-color: #c82333;
+}
