@@ -5,7 +5,7 @@ const url = require("url"); // Import the url module to parse query strings
 const fs = require("fs"); // Import the fs module for file operations
 const path = require("path"); // Import the path module for handling file paths
 
-const PORT = 3000; // Define the port number
+const PORT = 3001; // Define the port number
 
 // Create the HTTP server
 const server = http.createServer((req, res) => {
