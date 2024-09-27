@@ -11,12 +11,12 @@ const server = http.createServer((req, res) => {
   const pathName = parsedUrl.pathname; // Get the pathname (the part of the URL after the domain)
   const query = parsedUrl.query; // Get the query parameters
   const name = query.name || "Cadan"; // Get the 'name' query parameter, or default to 'Guest'
-  const { getDate } = require("./dateModule");
-  const { greetingMessage } = require("./messages"); // Import the message from messages.js
+ const { getDate } = require("./modules/utils");
+  const { greetingMessage } = require("./lang/en"); // Import the message from messages.js
   // Check if the request matches the desired endpoint
   if (pathName === "/COMP4537/labs/3/getDate/" && req.method === "GET") {
     const currentDate = new Date(); // Get the current server date and time
-   const message = greetingMessage.replace("%1", name) + ` ${currentDate}`;
+    const message = greetingMessage.replace("%1", name) + ` ${currentDate}`;
 
     // Set response headers for HTML content
     res.writeHead(200, { "Content-Type": "text/html" });
