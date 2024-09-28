@@ -1,11 +1,10 @@
-// app.js
-
 const http = require("http"); // Import the http module
 const url = require("url"); // Import the url module to parse query strings
 const fs = require("fs"); // Import the fs module for file operations
 const path = require("path"); // Import the path module for handling file paths
 
 const PORT = 3000; // Define the port number
+const hostname = "127.0.0.1"; // Define the hostname (localhost)
 
 // Create the HTTP server
 const server = http
@@ -111,6 +110,6 @@ const server = http
       res.end("404 Error: Endpoint not found");
     }
   })
-  .listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
+  .listen(PORT, hostname, () => {
+    console.log(`Server running at http://${hostname}:${PORT}/`);
   });
